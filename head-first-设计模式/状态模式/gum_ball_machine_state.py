@@ -232,35 +232,23 @@ class HasQuarterState(State):
 
 
 if __name__ == '__main__':
-    from datetime import datetime, timedelta
+    gumballModel = GumBallMachine(5)
+    gumballModel.insert_quarter()
+    gumballModel.turn_crank()
 
-    current_time = datetime.now()
-    test_date = datetime.strptime('2021-07-09 06:50:00', '%Y-%m-%d %H:%M:%S')
-    # "shift": "早班" if (6, 50) <= (x["start_time"].hour, x["start_time"].minute) < (18, 50) else "晚班",
-    print(datetime.strftime(current_time, "%Y-%m-%d %H:%M:%S"))
-    print(100 > timedelta(seconds=34))
-    current_banci = "早班" if (6, 50) <= (test_date.hour, test_date.minute) < (18, 50) else "晚班"
-    # "早班" if (6, 50) <= (x["start_time"].hour,x["start_time"].minute) < (18, 50) else "晚班"
-    print(current_banci)
-    print((current_time.hour, current_time.minute))
-    # print(current_banci)
-    # gumballModel = GumBallMachine(5)
-    # gumballModel.insert_quarter()
-    # gumballModel.turn_crank()
-    #
-    # gumballModel.insert_quarter()
-    #
-    # gumballModel.turn_crank()
-    # gumballModel.eject_quarter()
-    #
-    # gumballModel.insert_quarter()
-    # gumballModel.turn_crank()
-    #
-    # gumballModel.insert_quarter()
-    # gumballModel.turn_crank()
-    #
-    # gumballModel.insert_quarter()
-    # gumballModel.turn_crank()
-    #
-    # gumballModel.insert_quarter()
-    # gumballModel.turn_crank()
+    gumballModel.insert_quarter()
+
+    gumballModel.turn_crank()
+    gumballModel.eject_quarter()
+
+    gumballModel.insert_quarter()
+    gumballModel.turn_crank()
+
+    gumballModel.insert_quarter()
+    gumballModel.turn_crank()
+
+    gumballModel.insert_quarter()
+    gumballModel.turn_crank()
+
+    gumballModel.insert_quarter()
+    gumballModel.turn_crank()
