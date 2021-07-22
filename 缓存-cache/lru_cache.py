@@ -13,29 +13,44 @@ class Node(object):
 class LinkedList(object):
 
     def __init__(self):
-        self.head = Node(None)
-        self.tail = Node(None)
-        self.head.next_node = self.tail
-        self.tail.pre_node = self.head
+        self.head = self.tail = None
+        self.size = 0
 
     def move_to_front(self, node: Node):
-        # 删除原有节点
-        node.pre_node.next_node = node.next_node
-        node.next_node.pre_node = node.pre_node
-        self.append_to_front(node)
+        if node == self.tail or node == self.head:
+            # 头尾节点,就不做处理了
+            pass
+        else:
+            node.next_node.pre_node = node.pre_node
+            node.pre_node.next_node = node.next_node
+            self.append_to_front(node)
 
-    def append_to_front(self, node: Node):
-        node.pre_node = self.head
-        node.next_node = self.head.next_node
-
-        # ps: 注意这个的顺序不能更改
-        self.head.next_node.pre_node = node
-        self.head.next_node = node
+    def append_to_front(self, node):
+        if self.size == 0:
+            self.head = self.tail = node
+            self.head.pre_node = self.tail.next_node = None
+        else:
+            node.pre_node = None
+            node.next_node = self.head
+            self.head.pre_node = node
+            self.head = node
+        self.size += 1
 
     def remove_from_tail(self):
         if self.tail.pre_node != self.head:
             self.tail = self.tail.pre_node
             self.tail.next_node = None
+
+    def move_to_tail(self, node: Node):
+        if self.size == 0:
+            self.head = self.tail = node
+            self.head.pre_node = self.tail.next_node = None
+        else:
+            node.next_node = None
+            node.pre_node = self.tail
+            self.tail.next_node = node
+            self.tail = node
+        self.size += 1
 
 
 class Cache(object):
@@ -89,7 +104,6 @@ if __name__ == '__main__':
     lru.set('🌈🌈', '🦄🦄')
     lru.set('🌈🌈🌈', '🦄🦄🦄')
     lru.set('🦄🦄🦄', '🦄🦄🦄')
-    # assert lru.get('🌈') == -1
-    # assert lru.get('🦄🦄') == '🌈🌈'
+    print(lru.get('🦄'))
 
     print(lru.lookup)
