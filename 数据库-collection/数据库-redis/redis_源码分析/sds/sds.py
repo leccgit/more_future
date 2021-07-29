@@ -43,6 +43,7 @@ void sdsIncrLen(sds s, int incr);
 sds sdsRemoveFreeSpace(sds s);
 size_t sdsAllocSize(sds s);
 """
+SDS_MAX_PREALLOC = 1024 * 1024
 
 
 class Sds:
@@ -59,12 +60,15 @@ class Sds:
         """ 返回 中剩余可用空间的长度 """
         return self._fre
 
+    def sds_str(self):
+        return ''.join(self._buffer)
+
+    def __repr__(self):
+        return '<free:{}, total:{}, len:{}>'.format(self._fre, self.sds_str(), self._len)
+
     @property
     def buffer(self):
         return self._buffer
-
-    def __repr__(self):
-        return '<free:{}><total:{}><len:{}>'.format(self._fre, ''.join(self.buffer), self._len)
 
 
 class SdsOperator:
@@ -76,20 +80,52 @@ class SdsOperator:
     @classmethod
     def sds_new_len(cls, init_str: str, init_len: int) -> Sds:
         """
-        初始化sds
+        根据输入的字符串, 构建一个sds字符串
         :param init_str:
         :param init_len:
         :return:
         """
         new_sds = Sds(0, 0, [])
         new_sds._len = init_len
-        new_sds._fre = 0
+        new_sds._fre = 0  # 新创建的sds不进行预留空间
         if init_str and init_len:
             for s in init_str:
                 new_sds.buffer.append(s)
         return new_sds
 
+    @classmethod
+    def sds_empty(cls):
+        return cls.sds_new_len('', 0)
+
+    @classmethod
+    def sds_make_room_for(cls, cur_sds: Sds, add_len):
+        """
+        动态字符串扩容
+        :param cur_sds:
+        :param add_len:
+        :return:
+        """
+        # 剩余空间大于将要累加的空间, 不做处理
+        if cur_sds.sds_vail() >= add_len:
+            return cur_sds
+
+        # 新的动态字符串最小需要长度
+        cur_sds_len = cur_sds.sds_len()
+        new_sds_len = cur_sds_len + add_len
+        if new_sds_len < SDS_MAX_PREALLOC:
+            # 没有超出最大1m, 扩容空间 * 2
+            new_sds_len = new_sds_len * 2
+        else:
+            # 超过 1m, 扩容空间 + 1m
+            new_sds_len = new_sds_len + SDS_MAX_PREALLOC
+        cur_sds._fre = new_sds_len - cur_sds_len
+        return cur_sds
+
 
 if __name__ == '__main__':
     new_str = SdsOperator.sds_new('leichao')
+    print(new_str)
+    print(SdsOperator.sds_empty())
+    SdsOperator.sds_make_room_for(new_str, 1000)
+    assert new_str.sds_vail() == ((1000 + 7) * 2 - 7)
     print(new_str)
