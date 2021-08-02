@@ -1,4 +1,6 @@
 async_lru==1.0.2
 aiohttp
 fastcache==1.1.0
-transitions==0.8.8
+transitions
+
+werkzeug
