@@ -13,14 +13,14 @@ from __future__ import with_statement
 import os
 import sys
 
-from threading import local
 from jinja2 import Environment, PackageLoader, FileSystemLoader
-from werkzeug import Request as RequestBase, Response as ResponseBase, \
-    LocalStack, LocalProxy, create_environ, cached_property, \
-    SharedDataMiddleware
+from pyparsing import basestring
+from werkzeug import Request as RequestBase, Response as ResponseBase
+from werkzeug.local import LocalStack, LocalProxy
+from werkzeug.middleware.shared_data import SharedDataMiddleware
 from werkzeug.routing import Map, Rule
 from werkzeug.exceptions import HTTPException, InternalServerError
-from werkzeug.contrib.securecookie import SecureCookie
+from werkzeug.test import create_environ
 
 try:
     import pkg_resources

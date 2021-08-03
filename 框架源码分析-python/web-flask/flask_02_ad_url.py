@@ -1,3 +1,6 @@
+"""
+    所有的请求公用相同的全局变量, 无法进行有效的线程隔离, 后续将添加线程隔离对象的实现
+"""
 from werkzeug import Response as BaseResponse, Request as RequestBase
 from werkzeug.routing import Map, Rule
 from werkzeug.exceptions import HTTPException
@@ -16,6 +19,8 @@ class Flask_02(object):
         self.view_functions = {}  # 路由装饰函数
         self.url_map = Map()
         self.error_handlers = {}
+        self.before_request_func = []  # 前置请求
+        self.after_request_func = []  # 后置请求
 
     def errorHandlers(self, code):
         """
@@ -44,6 +49,16 @@ class Flask_02(object):
             return f
 
         return decorator
+
+    def before_request(self, f):
+        """注册一个函数, 在每个请求前置执行"""
+        self.before_request_func.append(f)
+        return f
+
+    def after_request(self, f):
+        """注册一个函数, 在每个请求后置执行"""
+        self.after_request_func.append(f)
+        return f
 
     def add_url_rule(self, rule, endpoint, **options):
         options['endpoint'] = endpoint
@@ -93,6 +108,13 @@ if __name__ == '__main__':
     @app.errorHandlers(404)
     def page_note_found(error):
         return "This page does not exist', 404"
+
+
+    def add_before_request():
+        print('路由前置判断进入!')
+
+
+    app.before_request(add_before_request)
 
 
     @app.route('/name')
