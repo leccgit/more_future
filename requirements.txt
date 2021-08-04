@@ -4,3 +4,6 @@ fastcache==1.1.0
 transitions
 
 werkzeug
+jinja2
+pyparsing
+flask

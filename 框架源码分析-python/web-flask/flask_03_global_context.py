@@ -1,6 +1,7 @@
 """
     添加请求的全局对象
 """
+import time
 from werkzeug import Response as BaseResponse, Request as RequestBase
 from werkzeug.local import LocalStack, LocalProxy
 from werkzeug.routing import Map, Rule
@@ -13,6 +14,10 @@ class Response(BaseResponse):
 
 class Request(RequestBase):
     pass
+
+
+
+
 
 
 class _RequestContext(object):
@@ -198,4 +203,3 @@ if __name__ == '__main__':
 
 
     app.run()
-    print(app.url_map)
