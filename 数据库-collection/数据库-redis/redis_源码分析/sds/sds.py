@@ -21,10 +21,6 @@ class Sds:
     def __repr__(self):
         return '<free:{}, total:{}, len:{}>'.format(self.sds_fre, self.sds_str(), self.sds_len)
 
-    # @property
-    # def buffer(self):
-    #     return self.sds_buffer
-
 
 class SdsOperator:
     @classmethod
