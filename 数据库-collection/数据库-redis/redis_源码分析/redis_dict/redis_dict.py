@@ -1,10 +1,9 @@
-LONG_MAX = 1024
-1024  # 定义hash表的最大值
+DICT_OK = 0  # hash表执行操作成功
+DICT_ERR = 1  # hash表执行操作失败
+dict_can_resize = 1  # hash表能执行扩容操作
+LONG_MAX = 1024 * 1024  # 定义hash表的最大值
 DICT_HT_INITIAL_SIZE = 4  # 初始化哈希表的大小
 dict_force_resize_ratio = 5  # 强制 rehash 的比率
-dict_can_resize = 1
-DICT_OK = 0
-DICT_ERR = 1
 
 
 def key_hash_function(key: str):
