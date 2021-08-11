@@ -1,4 +1,5 @@
-LONG_MAX = 1024 * 1024  # 定义hash表的最大值
+LONG_MAX = 1024
+1024  # 定义hash表的最大值
 DICT_HT_INITIAL_SIZE = 4  # 初始化哈希表的大小
 dict_force_resize_ratio = 5  # 强制 rehash 的比率
 dict_can_resize = 1
@@ -21,6 +22,37 @@ class RedisDictEntry:
 
     def __repr__(self):
         return "{%s:%s}" % (self.key, self.value)
+
+
+class DictIterator:
+    """
+     如果 safe 属性的值为 1 ，那么在迭代进行的过程中，
+     程序仍然可以执行 dictAdd 、 dictFind 和其他函数，对字典进行修改。
+     如果 safe 不为 1 ，那么程序只会调用 dictNext 对字典进行迭代，
+     而不对字典进行修改。
+    """
+
+    def __init__(self):
+        self.d = None  # 被迭代的字典
+        self.table = None  # 正在被迭代的哈希表号码，值可以是 0 或 1 。
+        self.index = None  # 迭代器当前所指向的哈希表索引位置
+        self.safe = None  # 标识这个迭代器是否安全
+        self.entry = None  # 当前迭代到的节点的指针        
+        # 当前迭代节点的下一个节点
+        # 因为在安全迭代器运作时， entry 所指向的节点可能会被修改，
+        # 所以需要一个额外的指针来保存下一节点的位置，
+        # 从而防止指针丢失
+        self.nextEntry = None
+
+    def __repr__(self):
+        all_entry = []
+        for entry in self.d.dictht[self.table].table:
+            tm = []
+            while entry:
+                tm.append(str(entry))
+                entry = entry.next
+            all_entry.append('[{}]'.format('->'.join(tm)) if tm else ',')
+        return '[{}]'.format(' '.join(all_entry))
 
 
 class DictHt:
@@ -120,6 +152,24 @@ class RedisDict:
         ht.table[key_index] = new_dict_entry
         ht.used += 1
         return new_dict_entry
+
+    def dict_find(self, key):
+        if self.dict_is_rehashing():
+            self._dict_rehash_step()
+        if self.dictht[0].size == 0:
+            # hash表为空
+            return None
+        key_hash = key_hash_function(key)
+        for i in range(2):
+            key_index = key_hash % self.dictht[i].sizemask
+            key_entry = self.dictht[i].table[key_index]
+            while key_entry:
+                if key_entry.key == key:
+                    return key_entry
+                key_entry = key_entry.next
+            if not self.dict_is_rehashing():
+                return None
+        return None
 
     def _dict_key_index_if_can_add(self, key) -> int:
         """
@@ -248,6 +298,61 @@ def dict_enable_resize():
     dict_can_resize = 1
 
 
+def dict_get_iterator(redis_dict: RedisDict) -> DictIterator:
+    """
+    获取字典的迭代器
+    :param redis_dict:
+    :return:
+    """
+    dict_iter = DictIterator()
+    dict_iter.d = redis_dict
+    dict_iter.table = 0
+    dict_iter.index = -1
+    dict_iter.safe = 0
+    dict_iter.entry = None
+    dict_iter.nextEntry = None
+    return dict_iter
+
+
+def dict_get_safe_iterator(redis_dict: RedisDict) -> DictIterator:
+    """
+    获取安全的字典迭代器
+    :param redis_dict:
+    :return:
+    """
+    dict_iter = dict_get_iterator(redis_dict)
+    dict_iter.safe = 1
+    return dict_iter
+
+
+def dict_next(dict_iter: DictIterator) -> RedisDictEntry or None:
+    while 1:
+        if dict_iter.entry is None:
+            ht = dict_iter.d.dictht[dict_iter.table]
+            if dict_iter.index == -1 and dict_iter.table == 0:
+                dict_iter.d.iterators += 1
+            dict_iter.index += 1
+            if dict_iter.index >= ht.size:
+                # 迭代器的索引大于当前的hash表大小, 代表当前已经迭代完毕
+                # 如果当前正在rehash中, 则迭代 1表
+                if dict_iter.d.dict_is_rehashing() and dict_iter.table == 0:
+                    dict_iter.table += 1
+                    dict_iter.index = 0
+                    ht = dict_iter.d.dictht[1]
+                else:
+                    break
+            # 节点前移
+            dict_iter.entry = ht.table[dict_iter.index]
+        else:
+            dict_iter.entry = dict_iter.nextEntry
+        if dict_iter.entry:
+            # 如果当前节点不为空，那么也记录下该节点的下个节点
+            # 因为安全迭代器有可能会将迭代器返回的当前节点删除
+            dict_iter.nextEntry = dict_iter.entry.next
+            return dict_iter.entry
+    return None
+
+
 if __name__ == '__main__':
     current_dict = RedisDict('str', None)
     from random import choice, randint
@@ -256,3 +361,13 @@ if __name__ == '__main__':
         key = choice('asdfghjklqwertyuiopzcvbn')
         current_dict.dict_add(key, randint(1, 100))
     print(current_dict)
+    print(current_dict.dict_find('d'))
+    make_dict_iter = dict_get_safe_iterator(current_dict)
+    current_iter = dict_next(make_dict_iter)
+    while current_iter:
+        print(current_iter)
+        current_iter = dict_next(make_dict_iter)
+        # if current_iter is None:
+        #     break
+        # print(make_dict_iter.entry)
+        # make_dict_iter = dict_next(make_dict_iter)
