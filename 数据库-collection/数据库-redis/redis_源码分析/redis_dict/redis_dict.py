@@ -20,7 +20,7 @@ class RedisDictEntry:
         self.next = next_dictEntry
 
     def __repr__(self):
-        return "<key={} value={}>".format(self.key, self.value)
+        return "{%s:%s}" % (self.key, self.value)
 
 
 class DictHt:
@@ -107,12 +107,15 @@ class RedisDict:
         :param key:
         :return:
         """
-
+        if self.dict_is_rehashing():
+            self._dict_rehash_step()
         key_index = self._dict_key_index_if_can_add(key)
+
         if key_index == -1:
             return
         ht = self.dictht[1] if self.dict_is_rehashing() else self.dictht[0]
         new_dict_entry = RedisDictEntry(key)
+
         new_dict_entry.next = ht.table[key_index]
         ht.table[key_index] = new_dict_entry
         ht.used += 1
@@ -152,6 +155,7 @@ class RedisDict:
             return DICT_OK
         if self.dictht[0].size == 0:
             # 初始化操作
+
             return self.dict_expand(DICT_HT_INITIAL_SIZE)
         if self.dictht[0].used >= self.dictht[0].size or (
                 dict_can_resize
@@ -160,9 +164,13 @@ class RedisDict:
             # 1）字典已使用节点数和字典大小之间的比率接近 1：1
             # 并且dict_can_resize为真
             # 2）已使用节点数和字典大小之间的比率超过 dict_force_resize_ratio
-            return self.dict_expand(DICT_HT_INITIAL_SIZE)
+            return self.dict_expand(self.dictht[0].used)
 
         return DICT_OK
+
+    def _dict_rehash_step(self):
+        if self.iterators == 0:
+            self.dict_rehash(1)
 
     def dict_rehash(self, n=100):
         """
@@ -224,8 +232,8 @@ class RedisDict:
             while entry:
                 tm.append(str(entry))
                 entry = entry.next
-            all_entry.append('[{}]'.format(' '.join(tm)))
-        return ' '.join(all_entry)
+            all_entry.append('[{}]'.format('->'.join(tm)) if tm else ',')
+        return '[{}]'.format(' '.join(all_entry))
 
 
 def dict_disable_resize():
@@ -244,9 +252,7 @@ if __name__ == '__main__':
     current_dict = RedisDict('str', None)
     from random import choice, randint
 
-    for i in range(20):
+    for i in range(100):
         key = choice('asdfghjklqwertyuiopzcvbn')
-        print(key)
         current_dict.dict_add(key, randint(1, 100))
-        print(current_dict)
     print(current_dict)
