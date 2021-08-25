@@ -177,7 +177,8 @@ if __name__ == '__main__':
 
     @app.errorHandlers(404)
     def page_note_found(error):
-        return "This page does not exist', 404"
+
+        return "This page does not exist!!', 404"
 
 
     @app.errorHandlers(500)
