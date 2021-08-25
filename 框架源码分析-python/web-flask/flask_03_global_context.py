@@ -16,10 +16,6 @@ class Request(RequestBase):
     pass
 
 
-
-
-
-
 class _RequestContext(object):
     def __init__(self, wsgi_app, environ):
         self.app = wsgi_app
@@ -199,6 +195,7 @@ if __name__ == '__main__':
     @app.route('/name')
     def make_index():
         print('this is index test!')
+        print(_request_ctx_stack._local.__storage__)
         return 'make_index'
 
 

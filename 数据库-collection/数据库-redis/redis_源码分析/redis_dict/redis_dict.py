@@ -4,7 +4,7 @@ dict_can_resize = 1  # hash表能执行扩容操作
 LONG_MAX = 1024 * 1024  # 定义hash表的最大值
 DICT_HT_INITIAL_SIZE = 4  # 初始化哈希表的大小
 dict_force_resize_ratio = 5  # 强制 rehash 的比率
-
+import io
 
 def key_hash_function(key: str):
     """ key的hash值函数 """

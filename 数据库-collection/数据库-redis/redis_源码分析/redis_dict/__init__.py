@@ -119,8 +119,18 @@ def redis_dict_add(redis_dict: RedisDict, key, value):
     :param value:
     :return:
     """
+    add_entry = redis_dict_add_raw(redis_dict, key)
+    if add_entry is None:
+        return DICT_ERR
+    add_entry.value = value
+    return DICT_OK
+
+
+def redis_dict_add_raw(redis_dict: RedisDict, key) -> RedisDictEntry:
     if redis_dict_is_rehashing(redis_dict):
+        # 取值的时候, 需要进行单步的rehash操作
         redis_dict_rehash_step(redis_dict)
+    # 查找索引
 
 
 def redis_dict_rehash_step(redis_dict: RedisDict):
@@ -134,7 +144,44 @@ def redis_dict_rehash_step(redis_dict: RedisDict):
 
 
 def redis_dict_rehash(redis_dict: RedisDict, n):
-    pass
+    """
+    hash table 的rehash过程
+    :param redis_dict:
+    :param n: 进行rehash的次数
+    :return:
+        0: 表示rehash成功
+        1: 表示rehash失败
+    """
+    if not redis_dict_is_rehashing(redis_dict):
+        return 0
+    while n:
+        if redis_dict.ht[0].used == 0:
+            # 0号hash表已经rehash结束
+            redis_dict.ht[0] = redis_dict.ht[1]
+            redis_dict_reset(redis_dict.ht[1])
+            redis_dict.rehashidx = -1  # 关闭rehash的标志位
+            return 0
+        while redis_dict.ht[0].table[redis_dict.rehashidx] is None:
+            # 当前节点为空
+            redis_dict.rehashidx += 1
+        current_entry = redis_dict.ht[0].table[redis_dict.rehashidx]
+        while current_entry:
+            next_entry = current_entry.next
+
+            # 向hash Table中插入指定的节点
+            insert_index = dict_hash_key(current_entry.key) % redis_dict.ht[1].sizemask
+            current_entry.next = redis_dict.ht[1].table[insert_index]
+            redis_dict.ht[1].table[insert_index] = current_entry.next
+
+            # 更新节点使用次数
+            redis_dict.ht[0].used += 1
+            redis_dict.ht[1].used += 1
+            current_entry = next_entry
+        # 更新0表中的该位置参数
+        redis_dict.ht[0].table[redis_dict.rehashidx] = None
+        redis_dict.rehashidx += 1
+        n -= 1
+    return 1
 
 
 def redis_dict_resize(redis_dict: RedisDict):
@@ -167,7 +214,7 @@ def redis_dict_expand(redis_dict: RedisDict, size):
     ht.size = realise_size
     ht.used = 0
     ht.sizemask = ht.size - 1
-    ht.table = [RedisDictEntry() for _ in range(ht.size)]
+    ht.table = [None for _ in range(ht.size)]
     if redis_dict.ht[0].used == 0:
         # 初始化操作
         redis_dict.ht[0] = ht
