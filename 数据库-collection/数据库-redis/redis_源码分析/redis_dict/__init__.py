@@ -126,11 +126,77 @@ def redis_dict_add(redis_dict: RedisDict, key, value):
     return DICT_OK
 
 
-def redis_dict_add_raw(redis_dict: RedisDict, key) -> RedisDictEntry:
+def redis_dict_add_raw(redis_dict: RedisDict, key) -> RedisDictEntry or None:
+    """
+    像redis的dict中, 插入一个原始的节点
+    :param redis_dict:
+    :param key:
+    :return:
+        None: if key in redis_dict
+        entry: if key not in redis_dict
+    """
     if redis_dict_is_rehashing(redis_dict):
         # 取值的时候, 需要进行单步的rehash操作
         redis_dict_rehash_step(redis_dict)
     # 查找索引
+    key_index = redis_dict_key_index(redis_dict, key)
+    if key_index == -1:
+        return None
+    # 根据哈希表中的rehash state选择将要插入的hash表
+    ht = redis_dict.ht[1] if redis_dict_is_rehashing(redis_dict) else redis_dict.ht[0]
+    dict_entry = RedisDictEntry()
+    dict_entry.key = key
+    dict_entry.next = ht.table[key_index]
+    ht.table[key_index] = dict_entry
+    ht.used += 1
+    return dict_entry
+
+
+def redis_dict_key_index(redis_dict: RedisDict, key):
+    """
+    获取 key在redis_dict中的hash表索引
+    没有获取到,则返回-1
+    :param redis_dict:
+    :param key:
+    :return:
+    """
+    if redis_dict_expand_if_needed(redis_dict) == DICT_ERR:
+        return -1
+    key_index = -1
+    key_hash = dict_hash_key(key)
+    for i in range(1):
+        key_index = key_hash % redis_dict.ht[i].sizemask
+        he = redis_dict.ht[i].table[key_index]
+        while he:
+            if he.key == key:
+                return -1
+            he = he.next
+        if not redis_dict_is_rehashing(redis_dict):
+            # 如果, redis_dict不处于rehash阶段, 那么检查表0已经足够
+            break
+    return key_index
+
+
+def redis_dict_expand_if_needed(redis_dict: RedisDict):
+    """
+    根据需要,初始化字典（的哈希表）,或者对字典（的现有哈希表）进行扩展
+    :param redis_dict:
+    :return:
+    """
+    if redis_dict_is_rehashing(redis_dict):
+        return DICT_OK
+    if redis_dict.ht[0].size == 0:
+        return redis_dict_expand(redis_dict, DICT_HT_INITIAL_SIZE)
+    # 一下条件为真的时候, 对字典进行扩展
+    # 字典已使用的大小和字典的容量比例为1:1
+    #    1. dict_can_resize为真
+    #    2. 已经使用的节点, 和字典大小间的比率超过 dict_force_resize_ratio
+    if redis_dict.ht[0].used >= redis_dict.ht[0].size and (
+            dict_can_resize or
+            redis_dict.ht[0].used / redis_dict.ht[0].size > dict_force_resize_ratio
+    ):
+        return redis_dict_expand(redis_dict, redis_dict.ht[0].used * 2)
+    return DICT_OK
 
 
 def redis_dict_rehash_step(redis_dict: RedisDict):
@@ -247,3 +313,10 @@ def redis_dict_is_rehashing(redis_dict: RedisDict):
     :return:
     """
     return redis_dict.rehashidx != -1
+
+
+if __name__ == '__main__':
+    test_redis_dict = redis_dict_create('test', [])
+    redis_dict_add(test_redis_dict, 'name', 'leichao')
+    print(test_redis_dict.ht[0].table)
+    print(redis_dict_key_index(test_redis_dict, 'name'))
