@@ -1,43 +1,34 @@
-import time
-import threading
-
-globals_set_value_1 = 0
-globals_set_value_2 = 0
+from datetime import datetime
+from threading import Lock, RLock
 
 
-def thread_a_set_value():
-    global globals_set_value_1
-    global globals_set_value_2
+def block_thread_with_lock():
+    main_thread = Lock()
 
-    thread_a_lock = threading.Lock()
-    thread_a_lock.acquire()
-    globals_set_value_1 = 'a'
-    thread_a_lock.acquire()
-    time.sleep(.5)
-    # thread_a_lock.release()
-    #
-    # thread_a_lock.acquire()
-    globals_set_value_2 = 'a'
-    thread_a_lock.release()
+    main_thread.acquire()
+    for i in range(10):
+        main_thread.acquire()
+        print('[{}]: now is {}......'.format(i, datetime.now()))
+        main_thread.release()
+    main_thread.release()
+    print('thread end!')
 
 
-def thread_b_set_value():
-    global globals_set_value_1
-    global globals_set_value_2
+def un_block_thread_with_RLock():
+    """
+    不同于Lock, RLock只会在首次请求的时候获取一把锁, 重复的加锁操作不会重复请求获取锁
+    """
+    main_thread = RLock()
 
-    thread_b_lock = threading.Lock()
-    thread_b_lock.acquire()
-    globals_set_value_2 = 'b'
-    time.sleep(.5)
-    # thread_b_lock.release()
-    #
-    # thread_b_lock.acquire()
-    globals_set_value_2 = 'b'
-    thread_b_lock.release()
+    main_thread.acquire()
+    for i in range(10):
+        main_thread.acquire()
+        print('[{}]: now is {}......'.format(i, datetime.now()))
+        main_thread.release()
+    main_thread.release()
+    print('thread end!')
+    main_thread.release()  # raise RuntimeError
 
 
 if __name__ == '__main__':
-    thread_a_set_value()
-    thread_b_set_value()
-    print(globals_set_value_1, globals_set_value_2)
-    print('end!')
+    un_block_thread_with_RLock()
