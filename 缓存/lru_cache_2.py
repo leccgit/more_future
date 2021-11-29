@@ -6,7 +6,10 @@
     使用双端链表实现, 可以避免单链表查询需要遍历整个链表的问题, 在该处增加了节点的缓存map
     类比: collection 中的 OrderDict的是实现, ps redis中的lru实现方式并不一致
 """
+from collections import OrderedDict
+from functools import lru_cache
 
+lru_cache
 
 class AbsLru(object):
     def set(self, key, value):

@@ -11,3 +11,7 @@ wtforms
 flask-bcrypt=0.7.1
 transitions
 environs=9.3.4
+numpy
+xlrd=2.0.0
+anytree
+graphviz=0.18
