@@ -17,3 +17,6 @@ anytree
 graphviz=0.18
 
 redis
+python-dotenv
+pika==1.2.0
+
