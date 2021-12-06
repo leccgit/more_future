@@ -11,6 +11,10 @@ channel = connection.channel()
 channel.queue_declare(queue="hello_world")
 for i in range(10):
     body_msg = "{}: hello world!".format(i + 1)
-    channel.basic_publish(exchange="", routing_key="hello_world", body=bytes(body_msg, encoding="utf-8"))
+    channel.basic_publish(
+        exchange="",
+        routing_key="hello_world",
+        body=bytes(body_msg, encoding="utf-8")
+    )
 print(" [x] Sent 'Hello World!'")
 connection.close()
