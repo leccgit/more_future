@@ -90,7 +90,6 @@ def ftp_down_load_file(
     save_local_file = os.path.join(os.path.dirname(__file__), local_file_name)
 
     # 创建连接参数
-    # ftp_conn_params = create_ftp_conn_params(**conn_params)
     with FTP() as ftp_client:
         # 建立ftp客户端的连接
         create_ftp_connection(ftp_client, conn_params)
