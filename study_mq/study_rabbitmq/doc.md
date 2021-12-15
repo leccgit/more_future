@@ -1,11 +1,10 @@
 # Rabbitmq基本使用教程
 
-## 1. rabbitmq使用场景
+## 1. rabbitmq能干什么
 
-### 1.1 hello world
+## 2. rabbitmq使用规范
 
-```markdown
-python -m unittest study_mq/study_rabbitmq/hello_world/hello_receive.py
-```
+## 3. rabbitmq添加容错的使用
 
-### 1.2 工作队列
+## 4. rabbitmq问题排除思路
+
