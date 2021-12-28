@@ -48,4 +48,4 @@ if __name__ == '__main__':
     try:
         result = 1 / 0
     except Exception as e:
-        py3_error_traceback(e)
+        log_traceback(e)
