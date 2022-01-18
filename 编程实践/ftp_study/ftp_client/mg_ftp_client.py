@@ -116,8 +116,9 @@ def ftp_download_remote_file(
 
 
 if __name__ == '__main__':
-    save_local_path = ftp_download_remote_file_with_time(build_ftp_conn_params(
-        host="xxxx",
-        user="xxx",
-        passwd="xxxx"
-    ), r"is_test/test.mdb")
+    save_local_path = ftp_download_remote_file_with_time(
+        build_ftp_conn_params(
+            host="xxxx",
+            user="xxx",
+            passwd="xxxx"
+        ), remote_file=r"is_test/test.mdb")

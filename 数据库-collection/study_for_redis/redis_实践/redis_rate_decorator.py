@@ -36,16 +36,6 @@ def redis_version_check(redis_cnn) -> bool:
     return bool(is_supported)
 
 
-def get_remote_address(request=None) -> str:
-    """
-    :return: the ip address for the current request
-     (or 127.0.0.1 if none found)
-    """
-    if not request:
-        return "127.0.0.1"
-    return request.remote_addr or "127.0.0.1"
-
-
 def redis_rate_limit(
         unique_key: str,
         source_name: str = '',
