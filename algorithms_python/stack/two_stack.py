@@ -7,7 +7,7 @@ class Stack:
         self.max_len = max_len
         self.top0 = -1
         self.top1 = max_len
-        self.stack = ["None" for _ in range(max_len)]
+        self.stack = ["None"] * max_len
 
     def empty(self) -> bool:
         return self.top0 == -1 and self.top1 == self.max_len
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     stack_push(stack_a, 5, flag="2")
     stack_push(stack_a, 6, flag="2")
     stack_push(stack_a, 7, flag="2")
-    # stack_push(stack_a, 8, flag="2")
+    stack_pop(stack_a, flag="1")
 
     print(stack_a)
     stack_push(stack_a, 8, flag="1")
