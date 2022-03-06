@@ -1,38 +1,11 @@
+from abc import ABC
 from typing import List
-from abc import abstractmethod, ABCMeta, ABC
+
+from algorithms_python.search_st.abs_st import AbsST
 
 
 def key_hash(key):
     return hash(key)
-
-
-class AbsHashTable(metaclass=ABCMeta):
-    @abstractmethod
-    def put(self, key, val):
-        pass
-
-    @abstractmethod
-    def get(self, key):
-        pass
-
-    @abstractmethod
-    def delete(self, key):
-        pass
-
-    @abstractmethod
-    def keys(self):
-        pass
-
-    @abstractmethod
-    def size(self):
-        pass
-
-    @abstractmethod
-    def is_empty(self) -> bool:
-        pass
-
-    def contains(self, item) -> bool:
-        pass
 
 
 class Node:
@@ -42,7 +15,7 @@ class Node:
         self.next = None
 
 
-class ArrayHashTable(AbsHashTable, ABC):
+class ArrayHashST(AbsST, ABC):
     def __init__(self):
         self._size = 0
         self._mask: int = 16
@@ -59,12 +32,11 @@ class ArrayHashTable(AbsHashTable, ABC):
                 return None
             pre_node = None
             while _key_node:
-                if pre_node and _key_node.key == key:
-                    pre_node.next = _key_node.next
-                    self._size -= 1
-                    return
-                elif _key_node.key == key:
-                    self._items[key_idx] = _key_node.next
+                if _key_node.key == key:
+                    if pre_node:
+                        pre_node.next = _key_node.next
+                    else:
+                        self._items[key_idx] = _key_node.next
                     self._size -= 1
                     return
                 pre_node = _key_node
@@ -113,27 +85,3 @@ class ArrayHashTable(AbsHashTable, ABC):
 
     def _key_idx(self, key):
         return key_hash(key) % self._mask
-
-
-if __name__ == '__main__':
-    ts_hash_table = ArrayHashTable()
-    ts_hash_table.put("name", "lei")
-    ts_hash_table.put("age", "23")
-    ts_hash_table.put("age", "23")
-    ts_hash_table.put("age", "23")
-
-    ts_hash_table.put("like", "food")
-
-    assert ts_hash_table.contains("like") is True
-    print(ts_hash_table.size())
-    assert ts_hash_table.size() == 3
-    ts_hash_table.delete("age")
-    for k in ts_hash_table.keys():
-        print(k, ts_hash_table.get(k))
-    for s in range(110):
-        ts_hash_table.put(s, "4")
-    for s in range(110):
-        ts_hash_table.delete(s)
-
-    assert ts_hash_table.contains("like")
-    print(list(ts_hash_table.keys()))
