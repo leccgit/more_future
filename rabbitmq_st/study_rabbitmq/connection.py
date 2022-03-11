@@ -1,6 +1,6 @@
 import pika
 
-from rabbitmq_st.study_rabbitmq.setting import Config
+from setting import Config
 
 rabbitmq_config = Config()
 

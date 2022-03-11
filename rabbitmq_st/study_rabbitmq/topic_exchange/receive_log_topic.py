@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-import sys
-
 import pika
 from random import randint
 from rabbitmq_st.study_rabbitmq.connection import connection_params

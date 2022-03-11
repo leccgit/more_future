@@ -3,7 +3,7 @@ import sys
 
 import pika
 
-from rabbitmq_st.study_rabbitmq.connection import connection_params
+from connection import connection_params
 
 connection = pika.BlockingConnection(connection_params)
 channel = connection.channel()
@@ -15,6 +15,7 @@ channel.exchange_declare(
     exchange_type="fanout"
 )
 body_msg = ' '.join(sys.argv[1:]) or "info: Hello World!"
+# 扇形交换机，不进行匹配 routing_key
 channel.basic_publish(
     exchange="pub_logs",
     routing_key="",
