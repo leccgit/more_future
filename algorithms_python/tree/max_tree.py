@@ -25,6 +25,12 @@ def print_tree(root):
         print_tree(root.right)
 
 
+def max_height_2(root: TreeNode) -> int:
+    if not root:
+        return 0
+    return 1 + max(max_height_2(root.left), max_height_2(root.right))
+
+
 if __name__ == '__main__':
     tree = TreeNode(10)
     tree.left = TreeNode(12)
@@ -37,3 +43,4 @@ if __name__ == '__main__':
     height = max_height(tree)
     print_tree(tree)
     print("height:", height)
+    print(max_height_2(tree))

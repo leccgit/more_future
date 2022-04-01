@@ -1,7 +1,7 @@
 import pika
 import random
 
-from rabbitmq_st.study_rabbitmq.connection import connection_params
+from rabbitmq_st.rabbitmq_demo.connection import connection_params
 
 
 def on_message(mq_channel, method_frame, header_frame, body):

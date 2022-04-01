@@ -3,7 +3,7 @@
 """
 import pika
 
-from rabbitmq_st.study_rabbitmq.connection import connection_params
+from rabbitmq_st.rabbitmq_demo.connection import connection_params
 
 
 def on_open(mq_connection):

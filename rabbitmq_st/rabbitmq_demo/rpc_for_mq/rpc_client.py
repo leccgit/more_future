@@ -2,7 +2,7 @@
 import pika
 import uuid
 
-from rabbitmq_st.study_rabbitmq.connection import connection_params
+from rabbitmq_st.rabbitmq_demo.connection import connection_params
 
 
 class FibonacciRpcClient(object):
