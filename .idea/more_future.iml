@@ -2,12 +2,13 @@
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/python_source_code/框架源码分析-python/flask_web_code" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/python_source_code/web_frame_analysis/flask_web_code" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/databases_st/redis_st/code_analysis" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/python_web" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/python_web/flask_web_collection" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/数据结构/some_tree" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/rabbitmq_st/study_rabbitmq" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rabbitmq_st/rabbitmq_demo" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/effective_python" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.6 (dev_flask)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
