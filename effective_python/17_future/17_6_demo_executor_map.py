@@ -23,6 +23,7 @@ def main():
         res = executor.map(loiter, range(5))
         display('results:', res)
         display('Waiting for individual results:')
+
         for i, result in enumerate(res):
             display('result {}: {}'.format(i, result))
     display("cost_time:{}".format(time() - st))
