@@ -76,7 +76,7 @@ def download_file_with_ssh_by_scp(
 
 
 if __name__ == '__main__':
-    upload_file_with_ssh_by_scp("/study/more_future/code_demo/scp_st/test_1_1.text",
+    upload_file_with_ssh_by_scp("/study/more_future/operate_example/scp_st/test_1_1.text",
                                 "/root/xx/xx/xxx.0.1/log",
                                 host="", username="", password="",
                                 exec_command="ls -al")
