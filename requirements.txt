@@ -32,3 +32,5 @@ scp==0.14.1
 requests
 pymongo==4.0.1
 Motor==2.5.1
+
+aredis

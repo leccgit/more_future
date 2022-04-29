@@ -48,4 +48,4 @@ if __name__ == '__main__':
     assert float_multi("0.1000000222", 0.000) == 0
     print(float_sum(1, "2"))
     print(float_multi(1, "0.001"))
-    print(float_sum("0.abc123","1"))
+    print(float_sum("0.abc123", "1"))

@@ -34,6 +34,4 @@ class FlaskStudy(object):
 
 
 app = FlaskStudy()
-app.run(host="0.0.0.0")
-
-
+app.run(host="0.0.0.0")  # 0.0.0.0: 告诉操作系统监听所有公开的IP, 默认的127.0.0.1只能本地访问
