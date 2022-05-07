@@ -8,10 +8,7 @@ class Node:
         self.when_expire = None
 
     def __repr__(self):
-        return str({
-            "key": self.key,
-            "value": self.value,
-        })
+        return "%s:%s" % self.key, self.value
 
 
 def create_node(
@@ -39,7 +36,7 @@ def node_is_expired(node: Node) -> bool:
     return when_expire < datetime.now()
 
 
-class KeySpace:
+class ExpireDict:
     def __init__(self):
         self.key_space = {}
 
@@ -67,23 +64,12 @@ class KeySpace:
             set_node_when_expire(node, when_expire)
         self.key_space[key] = node
 
-    def lookup_all_keys(self):
-        result = {}
-        for key in list(self.key_space.keys()):
-            value = self.get_generic_key(key)
-            if key in self.key_space:
-                result[key] = value
-        return result
-
-    def __repr__(self):
-        return str(self.lookup_all_keys())
-
 
 if __name__ == '__main__':
     import time
 
-    key_space = KeySpace()
+    key_space = ExpireDict()
     key_space.set_generic_key("name", "leichao", expire_seconds=2)
     for i in range(10):
+        print(key_space.get_generic_key("name"))
         time.sleep(.3)
-        print(key_space)

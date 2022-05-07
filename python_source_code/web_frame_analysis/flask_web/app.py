@@ -8,7 +8,7 @@ class FlaskStudy(object):
     def __init__(self):
         self.wsgi_app = self.wsgi_app
 
-    def run(self, host='0.0.0.0', port=5050, **options):
+    def run(self, host='127.0.0.1', port=5000, **options):
         from werkzeug import run_simple
         return run_simple(host, port, self, **options)
 
