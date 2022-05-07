@@ -1,3 +1,4 @@
+from pprint import pformat
 from copy import deepcopy
 
 DICT_OK = 0  # hash表执行操作成功
@@ -18,7 +19,7 @@ class RedisDictEntry:
         self.next = None
 
     def __repr__(self):
-        return "{%s:%s}" % (self.key, self.value)
+        return "Node(%s,%s)" % (self.key, self.value)
 
 
 class DictIterator:
@@ -54,14 +55,24 @@ class DictHt:
         self.used = 0  # 该哈希表已有节点的数量
 
     def __repr__(self):
+        return """
+    size:{}
+    used:{}
+    sizemark:{}
+    table:{}
+        """.format(self.size, self.used, self.sizemask, self._fluent_table())
+
+    def _fluent_table(self):
+        if not self.table:
+            return []
         result = []
-        for idx, cur_entry in enumerate(self.table or []):
-            one_node = []
+        for cur_entry in self.table:
+            t_node = []
             while cur_entry:
-                one_node.append(str(cur_entry))
+                t_node.append(str(cur_entry))
                 cur_entry = cur_entry.next
-            result.append('{}:[{}]'.format(idx, ','.join(one_node)))
-        return '<size:{}, table:{}, used:{}>'.format(self.size, ', '.join(result), self.used)
+            result.append(t_node)
+        return result
 
 
 class RedisDict:
@@ -75,7 +86,7 @@ class RedisDict:
         self.iterators = 0  # 目前正在运行的安全迭代器的数量
 
     def __repr__(self):
-        return '<h0:{}>\n<h1:{}>'.format(str(self.ht[0]), str(self.ht[1]))
+        return 'H0:{}\nH1:{}'.format(str(self.ht[0]), str(self.ht[1]))
 
 
 def dict_hash_key(key):
@@ -290,7 +301,7 @@ def redis_dict_find(redis_dict: RedisDict, key) -> RedisDictEntry or None:
     if redis_dict_is_rehashing(redis_dict):
         redis_dict_rehash_step(redis_dict)
     key_hash = dict_hash_key(key)
-    for i in range(1):
+    for i in range(2):
         key_index = key_hash % redis_dict.ht[i].sizemask
         he = redis_dict.ht[i].table[key_index]
         while he:
@@ -319,7 +330,7 @@ def redis_dict_generic_delete(redis_dict: RedisDict, key):
     for i in range(1):
         delete_index = key_hash % redis_dict.ht[i].sizemask
         he = redis_dict.ht[i].table[delete_index]
-        pre_node = DICT_ERR
+        pre_node = None
         while he:
             if he.key == key:
                 # 在链表中, 删除该节点
@@ -349,7 +360,7 @@ def redis_dict_key_index(redis_dict: RedisDict, key):
         return -1
     key_hash = dict_hash_key(key)
     key_index = -1
-    for i in range(1):
+    for i in range(2):
         key_index = key_hash % redis_dict.ht[i].sizemask
         he = redis_dict.ht[i].table[key_index]
 
@@ -445,6 +456,5 @@ if __name__ == '__main__':
     redis_dict_add(test_redis_dict, 'e', '5')
     redis_dict_add(test_redis_dict, 'f', '6')
     redis_dict_add(test_redis_dict, 'g', '7')
-    print(test_redis_dict)
     assert redis_dict_find(test_redis_dict, 'g').value == '7'
     assert redis_dict_generic_delete(test_redis_dict, 'a') == DICT_OK
