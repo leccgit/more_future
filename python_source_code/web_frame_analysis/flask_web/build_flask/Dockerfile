@@ -1,7 +1,7 @@
 #FROM python:3.7-alpine
 #RUN mkdir /code
-#COPY requirements.txt /code/
-#RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+#COPY requirements.txt.txt /code/
+#RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt.txt
 #
 #WORKDIR /code
 #COPY . /code
