@@ -1,4 +1,3 @@
-from pprint import pformat
 from copy import deepcopy
 
 DICT_OK = 0  # hash表执行操作成功
