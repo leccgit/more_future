@@ -1,7 +1,7 @@
 import unittest
 
-from algorithms_python.stack.ordered_stack import OrderedStack
-from algorithms_python.stack.stack import ArrayStack, LinkedListStack
+from algorithms_with_python.stack.ordered_stack import OrderedStack
+from algorithms_with_python.stack.stack import ArrayStack, LinkedListStack
 
 
 class TestStack(unittest.TestCase):

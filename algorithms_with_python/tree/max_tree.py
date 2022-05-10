@@ -1,4 +1,4 @@
-from algorithms_python.tree.tree_node import TreeNode
+from algorithms_with_python.tree.tree_node import TreeNode
 
 
 def max_height(root) -> int:

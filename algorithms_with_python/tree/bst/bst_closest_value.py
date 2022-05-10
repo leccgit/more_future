@@ -1,6 +1,6 @@
 import unittest
 
-from algorithms_python.tree.tree_node import TreeNode
+from algorithms_with_python.tree.tree_node import TreeNode
 
 """
     5

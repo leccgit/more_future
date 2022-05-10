@@ -17,7 +17,7 @@ return
    [5,8,4,5]
 ]
 """
-from algorithms_python.tree.tree_node import TreeNode
+from algorithms_with_python.tree.tree_node import TreeNode
 
 
 def path_sum(root: TreeNode, target_sum) -> list:

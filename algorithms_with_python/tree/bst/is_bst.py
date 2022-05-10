@@ -1,6 +1,6 @@
 import unittest
 
-from algorithms_python.tree.bst.bst import BST, Node
+from algorithms_with_python.tree.bst.bst import BST, Node
 
 
 def is_bst(root: Node) -> bool:

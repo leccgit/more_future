@@ -1,4 +1,4 @@
-from algorithms_python.tree.tree_node import TreeNode
+from algorithms_with_python.tree.tree_node import TreeNode
 
 
 def is_same_tree(q: TreeNode, p: TreeNode) -> bool:

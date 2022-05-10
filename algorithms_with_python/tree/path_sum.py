@@ -13,7 +13,7 @@ Given the below binary tree and sum = 22,
         7    2      1
 return true, as there exist a root-to-leaf path 5->4->11->2 which sum is 22.
 """
-from algorithms_python.tree.tree_node import TreeNode
+from algorithms_with_python.tree.tree_node import TreeNode
 
 
 def path_sum(root: TreeNode, target_sum) -> bool:

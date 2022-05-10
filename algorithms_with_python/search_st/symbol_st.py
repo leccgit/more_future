@@ -1,6 +1,6 @@
 from abc import ABC
 
-from algorithms_python.search_st.abs_st import AbsST
+from algorithms_with_python.search_st.abs_st import AbsST
 
 
 class Node:

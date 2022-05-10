@@ -1,7 +1,7 @@
 import unittest
 
-from algorithms_python.tree.bst.bst import BST
-from algorithms_python.tree.tree_node import TreeNode
+from algorithms_with_python.tree.bst.bst import BST
+from algorithms_with_python.tree.tree_node import TreeNode
 
 
 def count_left_node(root: TreeNode):
