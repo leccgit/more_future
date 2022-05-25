@@ -8,7 +8,7 @@ class Node:
         self.when_expire = None
 
     def __repr__(self):
-        return "%s:%s" % self.key, self.value
+        return "{}:{}".format(self.key, self.value)
 
 
 def create_node(
@@ -37,8 +37,10 @@ def node_is_expired(node: Node) -> bool:
 
 
 class ExpireDict:
-    def __init__(self):
-        self.key_space = {}
+    def __init__(self, key_space: dict = None):
+        if key_space is None:
+            key_space = {}
+        self.key_space = key_space
 
     def _expire_if_need(self, key):
         node = self.key_space.get(key)
@@ -68,8 +70,11 @@ class ExpireDict:
 if __name__ == '__main__':
     import time
 
-    key_space = ExpireDict()
-    key_space.set_generic_key("name", "leichao", expire_seconds=2)
+    simple_test = {"test": {}}
+    key_dict = ExpireDict(simple_test["test"])
+    key_dict.set_generic_key("name", "leichao", expire_seconds=2)
     for i in range(10):
-        print(key_space.get_generic_key("name"))
+        print(key_dict.get_generic_key("name"))
         time.sleep(.3)
+        print(simple_test)
+    print(simple_test)
