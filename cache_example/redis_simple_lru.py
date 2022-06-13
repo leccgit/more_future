@@ -1,4 +1,7 @@
+from collections import OrderedDict
 from datetime import datetime, timedelta
+
+_KEY_SPACE = OrderedDict()
 
 
 class Node:
@@ -8,73 +11,82 @@ class Node:
         self.when_expire = None
 
     def __repr__(self):
-        return "{}:{}".format(self.key, self.value)
+        return "<{}:{}, when_expire:{}>".format(
+            self.key, self.value, self.when_expire)
 
 
 def create_node(
         key: str, value,
 ) -> Node:
-    # 创建一个node节点, 该节点不会过期
+    # 创建一个永不过期的node节点
     return Node(key=key, value=value)
 
 
 def set_node_when_expire(
-        node: Node, when_expire: datetime,
+        node: Node,
+        when_expire: datetime = None,
 ) -> Node:
-    # 设置节点的过期时间
+    # 设置节点过期时间
     node.when_expire = when_expire
     return node
 
 
 def node_is_expired(node: Node) -> bool:
-    # 校验当前的node节点是否过期
-    if not node:
+    # 校验当前节点是否过期
+    if not node or not node.when_expire:
         return False
-    when_expire = node.when_expire
-    if not when_expire:
-        return False
-    return when_expire < datetime.now()
+    return node.when_expire < datetime.now()
 
 
 class ExpireDict:
-    def __init__(self, key_space: dict = None):
-        if key_space is None:
-            key_space = {}
-        self.key_space = key_space
+    def __init__(self):
+        self.key_space = _KEY_SPACE
 
-    def _expire_if_need(self, key):
-        node = self.key_space.get(key)
+    @staticmethod
+    def _expire_if_need(db_obj: dict, key):
+        node = db_obj.get(key, None)
         if not node_is_expired(node):
             return
-        del self.key_space[key]
-        print("key:{} is expire".format(key))
+        del db_obj[key]
+        print("key:{} expire".format(key))
 
-    def _look_up_key(self, key) -> Node or Node:
-        return self.key_space.get(key) or None
+    @staticmethod
+    def _look_up_key(db_obj: dict, key) -> Node or None:
+        return db_obj.get(key) or None
 
-    def get_generic_key(self, key):
-        self._expire_if_need(key)
-        node = self._look_up_key(key)
+    def get_generic_key(self, db_key: str, key: str):
+        db_obj = self.key_space.get(db_key, {})
+        if not db_obj:
+            return
+        self._expire_if_need(db_obj, key)
+        node = self._look_up_key(db_obj, key)
         return node.value if node else None
 
-    def set_generic_key(self, key, value, expire_seconds: int = 0):
-        when_expire = None
+    def set_generic_key(self, db_key: str, key: str, value, expire_seconds: int = 0):
+        db_obj = self.key_space.setdefault(db_key, {})
+
+        node = create_node(key, value)
         if expire_seconds:
             when_expire = datetime.now() + timedelta(seconds=expire_seconds)
-        node = create_node(key, value)
-        if when_expire:
             set_node_when_expire(node, when_expire)
-        self.key_space[key] = node
+        db_obj[key] = node
+
+
+def get_generic_key(db_key: str, key: str):
+    return ExpireDict().get_generic_key(db_key, key)
+
+
+def set_generic_key(db_key: str, key: str, value, expire_seconds: int = 0):
+    return ExpireDict().set_generic_key(db_key, key, value, expire_seconds)
 
 
 if __name__ == '__main__':
     import time
 
-    simple_test = {"test": {}}
-    key_dict = ExpireDict(simple_test["test"])
-    key_dict.set_generic_key("name", "leichao", expire_seconds=2)
+    set_generic_key("test", "name", "leichao", expire_seconds=2)
+
     for i in range(10):
-        print(key_dict.get_generic_key("name"))
+        print(get_generic_key("test", "name"))
+
         time.sleep(.3)
-        print(simple_test)
-    print(simple_test)
+    print(_KEY_SPACE)
