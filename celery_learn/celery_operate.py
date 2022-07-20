@@ -10,6 +10,7 @@ celery_app = Celery(
     include=["src.celery_tasks.tasks_hello"]
 )
 
+# celery更新配置操作
 celery_app.conf.update(
     result_expires=3600,  # 设置结果的过期时间
 )
