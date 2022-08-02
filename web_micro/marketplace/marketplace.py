@@ -1,18 +1,18 @@
 import os
 
-from flask import Flask, jsonify
+from flask import Flask
 import grpc
 
-from recommendations_pb2_grpc import RecommendationsStub
 from recommendations_pb2 import RecommendationRequest, BookCategory
-
-app = Flask(__name__)
+from recommendations_pb2_grpc import RecommendationsStub
 
 recommendations_host = os.getenv("RECOMMENDATIONS_HOST", "localhost")
 recommendations_channel = grpc.insecure_channel(
     f"{recommendations_host}:50051"
 )
 recommendations_client = RecommendationsStub(recommendations_channel)
+
+app = Flask(__name__)
 
 
 @app.route("/")

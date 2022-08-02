@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+/**
+  定义消息体格式
+  query: 字符串
+  page_number: int, 查询页签
+  result_per_page: int, 每页返回的数量
+ */
+message SearchRequest01 {
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+}
+
+/*
+  默认值
+  字符串: 默认值为空字符串
+  字节: 默认值为空字节
+  布尔值: 默认值为false
+  数字类型: 默认值为0
+  enums: 默认值是第一个定义的 enum value, 必须为0
+  消息字段: 取决于语言
+ */
+
+message SearchRequest02{
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+  enum Corpus {
+    UNIVERSAL = 0;
+    WEB = 1;
+    IMAGES = 2;
+    LOCAL = 3;
+    NEWS = 4;
+    PRODUCTS = 5;
+    VIDEO = 6;
+  }
+  Corpus corpus = 4;
+}
+/**
+  Corpus枚举的第一个常量映射到0, 每个枚举定义都必须包含一个映射到零的常量作为其第一个元素
+  必须有0值: 以便使用0作为数字默认值;
+  零值必须是第一个元素，以便与第一个枚举值始终为默认值的proto2语义兼容
+ */
+
+message SearchRequest03{
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+  enum Corpus {
+    UNIVERSAL = 0;
+    WEB = 1;
+    IMAGES = 2;
+    LOCAL = 3;
+    NEWS = 4;
+    PRODUCTS = 5;
+    VIDEO = 6;
+  }
+  Corpus corpus = 4;
+}
+
+message SearchResponse01 {
+  repeated Result results = 1;
+}
+
+message Result {
+  string url = 1;
+  string title = 2;
+  repeated string snippets = 3;
+}
+

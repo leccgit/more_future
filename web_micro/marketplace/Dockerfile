@@ -9,6 +9,8 @@ RUN python -m pip install -r requirements.txt
 RUN python -m grpc_tools.protoc -I ../protobufs --python_out=. \
            --grpc_python_out=. ../protobufs/recommendations.proto
 
-EXPOSE 5000
-ENV FLASK_APP=marketplace.py
-ENTRYPOINT [ "flask","run", "--host=0.0.0.0"]
+RUN chmod a+x boot.sh
+
+EXPOSE 5050
+# boot.sh 该处的运行可能存在问题，比如提示文件未找到
+ENTRYPOINT ["./boot.sh"]

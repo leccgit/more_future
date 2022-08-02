@@ -1,2 +1,4 @@
 flask
 grpcio-tools
+gunicorn==20.1.0
+
