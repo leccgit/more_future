@@ -1,0 +1,33 @@
+// 指定 proto语法版本
+syntax = "proto3";
+
+// 图书类别的枚举类型
+enum BookCategory {
+    MYSTERY = 0;
+    SCIENCE_FICTION = 1;
+    SELF_HELP = 2;
+}
+
+// 定义了api的请求体结构, 值得注意的是, 该处会进行类型校验, 但是对于不存在的值, 会给当前类型的默认值
+// 例如int, 则默认值为0, 字符串, 则默认值为'0'
+message RecommendationRequest {
+    int32 user_id = 1;
+    BookCategory category = 2;
+    int32 max_results = 3;
+}
+
+// 定义推荐图书类型
+message BookRecommendation {
+    int32 id = 1;
+    string title = 2;
+}
+
+// 定义了 BookRecommendation的微服务响应, repeated 表示返回的为响应列表
+message RecommendationResponse {
+    repeated BookRecommendation recommendations = 1;
+}
+
+// 定义了api的方法
+service Recommendations {
+    rpc Recommend (RecommendationRequest) returns (RecommendationResponse);
+}

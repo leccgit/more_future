@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  marketplace:
+    build:
+      context: .
+      dockerfile: marketplace/Dockerfile
+    environment:
+      RECOMMENDATIONS_HOST: recommendations
+    image: marketplace
+    networks:
+      - microservices
+    ports:
+      - 5000:5000
+
+  recommendations:
+    build:
+      context: .
+      dockerfile: recommendations/Dockerfile
+    image: recommendations
+    networks:
+      - microservices
+networks:
+  microservices:
