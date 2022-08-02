@@ -6,10 +6,11 @@ COPY recommendations /service/recommendations
 WORKDIR /service/recommendations
 
 RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install -r requirements.txt
+RUN python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --no-cache-dir -r requirements.txt
 RUN python3 -m grpc_tools.protoc -I ../protobufs --python_out=. \
            --grpc_python_out=. ../protobufs/recommendations.proto
 
+RUN chmod a+x boot.sh
+
 EXPOSE 50051
-ENTRYPOINT [ "python", "recommendations.py" ]
-# docker build . -f recommendations/Dockerfile -t recommendations
+ENTRYPOINT ["./boot.sh"]
