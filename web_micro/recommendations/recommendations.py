@@ -74,10 +74,13 @@ def serve():
             pass
 
     interceptors = [ErrorLogger()]
+    # 创建gRPC服务器, 使用10个线程来处理请求
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10), interceptors=interceptors)
+    # 将服务器和处理程序相关联
     recommendations_pb2_grpc.add_RecommendationsServicer_to_server(
         RecommendationService(), server
     )
+    # 50051是gRPC的标准端口, 可以根据实际使用进行调整
     server.add_insecure_port("[::]:50051")
     server.start()
     server.wait_for_termination()
@@ -85,3 +88,4 @@ def serve():
 
 if __name__ == "__main__":
     serve()
+

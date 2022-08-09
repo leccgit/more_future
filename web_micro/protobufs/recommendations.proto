@@ -10,6 +10,7 @@ enum BookCategory {
 
 // 定义了api的请求体结构, 值得注意的是, 该处会进行类型校验, 但是对于不存在的值, 会给当前类型的默认值
 // 例如int, 则默认值为0, 字符串, 则默认值为'0'
+// recommendation: 单词含义-> 推荐
 message RecommendationRequest {
     int32 user_id = 1;
     BookCategory category = 2;
@@ -27,7 +28,7 @@ message RecommendationResponse {
     repeated BookRecommendation recommendations = 1;
 }
 
-// 定义了api的方法
+// 返回相关推荐信息
 service Recommendations {
     rpc Recommend (RecommendationRequest) returns (RecommendationResponse);
 }

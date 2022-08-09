@@ -1,4 +1,4 @@
-FROM python
+FROM python:3.6
 
 RUN mkdir /service
 COPY protobufs/ /service/protobufs/
