@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/数据结构/some_tree" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rabbitmq_operate/operate_example" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/effective_python" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/celery_st" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.6 (dev_flask)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
