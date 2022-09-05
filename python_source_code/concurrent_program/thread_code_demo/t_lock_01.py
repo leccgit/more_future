@@ -1,4 +1,4 @@
-from threading import Thread, Lock, get_ident
+from threading import Lock, Thread, get_ident
 
 g_sum_result = 0
 g_lock = Lock()

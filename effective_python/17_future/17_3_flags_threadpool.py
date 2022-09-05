@@ -1,9 +1,9 @@
 import os
-import time
 import sys
+import time
+from concurrent import futures
 
 import requests
-from concurrent import futures
 
 MAX_WORKERS = 20
 POP20_CC = ('CN IN US ID BR PK NG BD RU JP '

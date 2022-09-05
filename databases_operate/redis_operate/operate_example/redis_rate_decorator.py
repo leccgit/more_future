@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 #  -*- coding: utf-8 -*-
 
-from hashlib import sha1
-from functools import wraps
-from redis import Redis, ConnectionPool
-from redis.exceptions import NoScriptError
 from distutils.version import StrictVersion
+from functools import wraps
+from hashlib import sha1
+
+from redis import ConnectionPool, Redis
+from redis.exceptions import NoScriptError
 
 # Adapted from http://redis.io/commands/incr#pattern-rate-limiter-2
 INCREMENT_SCRIPT = b"""

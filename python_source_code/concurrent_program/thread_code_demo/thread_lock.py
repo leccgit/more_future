@@ -1,7 +1,7 @@
 import asyncio
+from asyncio import Lock as ALock
 from datetime import datetime
 from threading import Lock, RLock
-from asyncio import Lock as ALock
 
 
 def block_thread_with_lock():

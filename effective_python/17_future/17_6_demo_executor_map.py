@@ -1,5 +1,5 @@
-from time import time, sleep, strftime
 from concurrent import futures
+from time import sleep, strftime, time
 
 
 def display(*args):

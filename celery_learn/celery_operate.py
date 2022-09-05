@@ -1,6 +1,5 @@
-from celery import Celery
-
 from base_conf import Config
+from celery import Celery
 
 celery_app = Celery(
     "celery_learn",

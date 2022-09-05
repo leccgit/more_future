@@ -1,10 +1,11 @@
 import asyncio
-from celery.utils.log import get_task_logger
-from motor.motor_asyncio import AsyncIOMotorClient
-from mg_app_framework import set_handler, TaskKey, get_handler, IdiServerConfigBasic
 
 from base_conf import Config
+from celery.utils.log import get_task_logger
 from celery_operate import celery_app
+from mg_app_framework import (IdiServerConfigBasic, TaskKey, get_handler,
+                              set_handler)
+from motor.motor_asyncio import AsyncIOMotorClient
 
 logger = get_task_logger(__name__)
 

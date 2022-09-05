@@ -1,5 +1,5 @@
+from paramiko import AutoAddPolicy, SSHClient
 from scp import SCPClient
-from paramiko import SSHClient, AutoAddPolicy
 
 
 class MySSHClient:

@@ -10,16 +10,18 @@
     :license: BSD, see LICENSE for more details.
 """
 from __future__ import with_statement
+
 import os
 import sys
 
-from jinja2 import Environment, PackageLoader, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, PackageLoader
 from pyparsing import basestring
-from werkzeug import Request as RequestBase, Response as ResponseBase
-from werkzeug.local import LocalStack, LocalProxy
+from werkzeug import Request as RequestBase
+from werkzeug import Response as ResponseBase
+from werkzeug.exceptions import HTTPException, InternalServerError
+from werkzeug.local import LocalProxy, LocalStack
 from werkzeug.middleware.shared_data import SharedDataMiddleware
 from werkzeug.routing import Map, Rule
-from werkzeug.exceptions import HTTPException, InternalServerError
 from werkzeug.test import create_environ
 
 try:

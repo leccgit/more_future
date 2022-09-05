@@ -1,5 +1,6 @@
 import time
-from redis import Redis, ConnectionPool
+
+from redis import ConnectionPool, Redis
 
 
 def test_pipe_line(conn: Redis):

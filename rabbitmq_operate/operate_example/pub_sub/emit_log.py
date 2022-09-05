@@ -2,7 +2,6 @@
 import sys
 
 import pika
-
 from connection import connection_params
 
 connection = pika.BlockingConnection(connection_params)

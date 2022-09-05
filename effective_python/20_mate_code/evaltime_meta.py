@@ -1,5 +1,4 @@
-from evalsupport import deco_alpha
-from evalsupport import MetaAleph
+from evalsupport import MetaAleph, deco_alpha
 
 print('<[1]> evaltime_meta module start')
 

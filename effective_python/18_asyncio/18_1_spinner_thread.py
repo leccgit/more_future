@@ -1,8 +1,8 @@
-import threading
 # from concurrent import futures
 import itertools
-import time
 import sys
+import threading
+import time
 
 write, flush = sys.stdout.write, sys.stdout.flush
 

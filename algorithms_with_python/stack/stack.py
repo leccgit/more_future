@@ -1,7 +1,7 @@
 """
 Stack Abstract Data Type (ADT)
 """
-from abc import ABCMeta, abstractmethod, ABC
+from abc import ABC, ABCMeta, abstractmethod
 
 
 class AbstractStack(metaclass=ABCMeta):

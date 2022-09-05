@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-import pika
 from random import randint
 
+import pika
 from connection import connection_params
 
 connection = pika.BlockingConnection(connection_params)

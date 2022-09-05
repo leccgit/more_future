@@ -1,9 +1,8 @@
 import os
 
-from flask import Flask
 import grpc
-
-from recommendations_pb2 import RecommendationRequest, BookCategory
+from flask import Flask
+from recommendations_pb2 import BookCategory, RecommendationRequest
 from recommendations_pb2_grpc import RecommendationsStub
 
 recommendations_host = os.getenv("RECOMMENDATIONS_HOST", "localhost")

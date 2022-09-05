@@ -1,7 +1,8 @@
-import os
-import time
-import sys
 import asyncio
+import os
+import sys
+import time
+
 import aiohttp
 
 POP20_CC = ('CN IN US ID BR PK NG BD RU JP '

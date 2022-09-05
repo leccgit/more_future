@@ -2,10 +2,12 @@
     添加请求的全局对象
 """
 import time
-from werkzeug import Response as BaseResponse, Request as RequestBase
-from werkzeug.local import LocalStack, LocalProxy
-from werkzeug.routing import Map, Rule
+
+from werkzeug import Request as RequestBase
+from werkzeug import Response as BaseResponse
 from werkzeug.exceptions import HTTPException
+from werkzeug.local import LocalProxy, LocalStack
+from werkzeug.routing import Map, Rule
 
 
 class Response(BaseResponse):

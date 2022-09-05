@@ -1,7 +1,7 @@
 import os
 import time
-from typing import Tuple
 from ftplib import FTP, error_perm
+from typing import Tuple
 
 
 class FtpFileNotFound(Exception):

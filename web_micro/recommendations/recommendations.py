@@ -1,16 +1,11 @@
-from concurrent import futures
 import random
+from concurrent import futures
 
 import grpc
-
-from recommendations_pb2 import (
-    BookCategory,
-    BookRecommendation,
-    RecommendationResponse,
-)
 import recommendations_pb2_grpc
-
 from grpc_interceptor import ServerInterceptor
+from recommendations_pb2 import (BookCategory, BookRecommendation,
+                                 RecommendationResponse)
 
 # 模拟数据库中的数据
 books_by_category = {

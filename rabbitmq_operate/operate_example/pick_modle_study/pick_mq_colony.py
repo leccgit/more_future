@@ -1,5 +1,6 @@
-import pika
 import random
+
+import pika
 
 from rabbitmq_operate.operate_example.connection import connection_params
 

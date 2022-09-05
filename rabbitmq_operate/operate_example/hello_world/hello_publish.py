@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # python -m unittest hello_world/hello_publish.py
 import pika
-
 from connection import connection_params
 
 connection = pika.BlockingConnection(connection_params)

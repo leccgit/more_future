@@ -35,3 +35,4 @@ Motor==2.5.1
 
 aredis
 celery==3.4.1
+fabric2

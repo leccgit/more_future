@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
+from random import randint
+
 import pika
 
-from random import randint
 from rabbitmq_operate.operate_example.connection import connection_params
 
 connection = pika.BlockingConnection(connection_params)

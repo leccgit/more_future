@@ -1,9 +1,10 @@
 """
     所有的请求公用相同的全局变量, 无法进行有效的线程隔离, 后续将添加线程隔离对象的实现
 """
-from werkzeug import Response as BaseResponse, Request as RequestBase
-from werkzeug.routing import Map, Rule
+from werkzeug import Request as RequestBase
+from werkzeug import Response as BaseResponse
 from werkzeug.exceptions import HTTPException
+from werkzeug.routing import Map, Rule
 
 
 class Response(BaseResponse):

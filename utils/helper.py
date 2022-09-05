@@ -1,6 +1,6 @@
-from time import time
-from functools import wraps
 from asyncio import iscoroutinefunction
+from functools import wraps
+from time import time
 
 
 def time_costs(f):

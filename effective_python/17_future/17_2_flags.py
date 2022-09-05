@@ -1,6 +1,6 @@
 import os
-import time
 import sys
+import time
 
 import requests
 

@@ -1,7 +1,7 @@
 import time
+from asyncio import gather, get_event_loop, iscoroutinefunction, sleep
 from functools import wraps
 from random import randint
-from asyncio import gather, get_event_loop, sleep, iscoroutinefunction
 
 
 def time_cost(func):

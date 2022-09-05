@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-import pika
 import uuid
+
+import pika
 
 from rabbitmq_operate.operate_example.connection import connection_params
 
