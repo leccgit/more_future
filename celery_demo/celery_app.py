@@ -1,14 +1,15 @@
-from base_conf import Config
 from celery import Celery
 
+from setting import Config
+
 celery_app = Celery(
-    "celery_learn",
-    broker=Config.REMOTE_RABBIT_MQ_BROKER_URL,
-    backend=Config.REMOTE_MONGO_BACKEND_URL,
+    "celery_demo",
+    broker=Config.BACKEND_URL_BY_REDIS,
+    backend=Config.BACKEND_URL_BY_REDIS,
     # include: 每个worker应该导入的模块列表，以实例创建的模块的目录作为起始路径
     include=[
-        "src.celery_tasks.tasks_hello",
-        "src.celery_tasks.celery_with_mg",
+        "src.celery_tasks.task_with_hello",
+        "src.celery_tasks.task_with_mg",
     ]
 )
 

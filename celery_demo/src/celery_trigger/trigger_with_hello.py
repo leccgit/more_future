@@ -1,4 +1,4 @@
-from src.celery_tasks.tasks_hello import send_celery_msg
+from src.celery_tasks.task_with_hello import send_celery_msg
 
 result = send_celery_msg.delay("yuan")
 print(result.id)
