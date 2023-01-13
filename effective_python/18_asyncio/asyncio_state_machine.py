@@ -9,7 +9,7 @@ def StartState():
     print("Start State called \n")
     input_value = randint(0, 1)
     time.sleep(1)
-    if (input_value == 0):
+    if input_value == 0:
         result = yield from State2(input_value)
     else:
         result = yield from State1(input_value)
@@ -50,7 +50,7 @@ def State3(transition_value):
     input_value = randint(0, 1)
     time.sleep(1)
     print("...Evaluating...")
-    if (input_value == 0):
+    if input_value == 0:
         result = yield from State1(input_value)
     else:
         result = yield from EndState(input_value)
