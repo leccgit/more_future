@@ -1,5 +1,7 @@
 import keyword
-from collections import abc
+from collections import abc, deque
+from typing import List
+from copy import deepcopy
 
 
 class FrozenJSON:
@@ -7,6 +9,7 @@ class FrozenJSON:
         self.__data = {}
         for key, val in mapping.items():
             if keyword.iskeyword(key):
+                # 针对python的关键字，进行替换别名
                 key = "__" + key
             self.__data[key] = val
 
@@ -28,7 +31,32 @@ class FrozenJSON:
             return obj
 
 
+def dict_path(mapping: abc.Mapping, paths: List):
+    if not mapping:
+        return
+    if not paths:
+        return mapping
+
+    path_deque = deque(paths)
+    travel_mapping = deepcopy(mapping)
+    while path_deque:
+        path_name = path_deque.popleft()
+        travel_mapping = travel_mapping[path_name]
+
+    return travel_mapping
+
+
 if __name__ == '__main__':
-    grad = FrozenJSON({'name': 'Jim Bo', 'class': 1982, "ages": [1, 2, 34]})
+    front_dict = {'name': 'Jim Bo', 'class': 1982, "ages": [1, 2, 34], "like": {"food": "apple", "age": [1, 2, 3]}}
+
+    grad = FrozenJSON(front_dict)
     print(grad.__class)
     print(grad.keys())
+    print(grad.like.food)
+    print(grad.ages[0])
+    print("demo", grad.ages)
+    print("demo", grad.like)
+
+    print(dict_path(front_dict, ["like", "food"]))
+    print(dict_path(front_dict, ["ages", 0]))
+    print(dict_path(front_dict, ["class"]))

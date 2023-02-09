@@ -2,10 +2,9 @@ import asyncio
 from threading import RLock
 
 from celery.utils.log import get_task_logger
+from celery_app import celery_app
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient
-
-from celery_app import celery_app
 
 logger = get_task_logger(__name__)
 

@@ -2,8 +2,7 @@ import unittest
 
 from algorithms.search_st.abs_st import AbsST
 from algorithms.search_st.hash_st import ArrayHashST
-from algorithms.search_st.symbol_st import (BinarySearchST,
-                                            SequentialSearchST)
+from algorithms.search_st.symbol_st import BinarySearchST, SequentialSearchST
 
 
 def test_main(hs: AbsST):
