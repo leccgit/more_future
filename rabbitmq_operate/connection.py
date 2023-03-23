@@ -1,14 +1,13 @@
 import pika
-from setting import Config
 
-rabbitmq_config = Config()
+from rabbitmq_operate.setting import Config
 
 credentials = pika.PlainCredentials(
-    username=rabbitmq_config.RABBITMQ_USER_NAME,
-    password=rabbitmq_config.RABBITMQ_PASSWORD
+    username=Config.RABBITMQ_USER_NAME,
+    password=Config.RABBITMQ_PASSWORD
 )
 connection_params = pika.ConnectionParameters(
-    host=rabbitmq_config.RABBITMQ_HOST,
-    port=rabbitmq_config.RABBITMQ_PORT,
+    host=Config.RABBITMQ_HOST,
+    port=Config.RABBITMQ_PORT,
     credentials=credentials
 )

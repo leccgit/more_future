@@ -29,6 +29,7 @@ class InMemoryCatch:
                 del self._store[key]
             else:
                 return v
+        return None
 
     def get(self, key: str) -> str:
         with self._lock:
@@ -58,7 +59,11 @@ class InMemoryCatch:
         return value
 
     def _clear_expire(self):
-        if self._set_times % 100 == 0:
+        """
+        每设置50次,进行一次清除lru逻辑
+        :return:
+        """
+        if self._set_times % 50 == 0:
             keys = list(self._store.keys())
             for key in keys:
                 self._get(key)
@@ -68,6 +73,10 @@ class InMemoryCatch:
             val = self.get(key)
             if val:
                 yield key, val
+
+
+def generic_set_command(key: str, value: str, expire: int = None, nx=False, xx=False):
+    pass
 
 
 if __name__ == '__main__':

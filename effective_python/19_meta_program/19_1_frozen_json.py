@@ -1,7 +1,7 @@
 import keyword
 from collections import abc, deque
-from typing import List
 from copy import deepcopy
+from typing import List
 
 
 class FrozenJSON:

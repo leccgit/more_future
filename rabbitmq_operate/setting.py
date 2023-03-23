@@ -11,3 +11,7 @@ class Config(object):
     RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST")
     RABBITMQ_USER_NAME = os.environ.get("RABBITMQ_USER_NAME")
     RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_PASSWORD")
+
+
+if __name__ == '__main__':
+    print(basedir, Config.RABBITMQ_PORT)

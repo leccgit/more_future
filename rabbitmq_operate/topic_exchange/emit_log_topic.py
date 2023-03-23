@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import pika
 
-from rabbitmq_operate.operate_example.connection import connection_params
+# from rabbitmq_operate.operate_example.connection import connection_params
+from rabbitmq_operate.connection import connection_params
 
 connection = pika.BlockingConnection(connection_params)
 channel = connection.channel()
