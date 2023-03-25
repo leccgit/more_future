@@ -127,24 +127,38 @@ class JobMate:
         self.exec_kwargs = self.content.get("exec_kwargs") or {}
 
     def get_jid(self) -> str:
+        """
+        任务id
+        :return:
+        """
         return self._job_id
 
     def get_score(self) -> int:
+        """
+        当前任务的触发时间分值
+        :return:
+        """
         return int(self._job_score)
 
     def exec_once(self) -> bool:
         """
-        是否执行一次
+        当前任务是否只执行一次
         :return: 
         """
         return bool(self.is_once)
 
     def exec_permanent(self) -> bool:
         """
-        是否永久执行
+        当前任务是否永久执行
         :return: 
         """
         return bool(self.is_permanent)
+
+    def pick_job(self):
+        pass
+        # return {
+        #     "job_id": "",
+        # }
 
     def exec_time_in_work_section(
             self, exec_time: datetime,
@@ -165,6 +179,10 @@ class JobMate:
         return False
 
     def next_trigger_score(self) -> int:
+        """
+        获取任务下一触发分值
+        :return:
+        """
         try:
             if self.trigger_type == TriggerType.cron:
                 return self._get_cron_next_trigger_score()
@@ -279,8 +297,8 @@ class DelayBucket:
         :param kwargs:
         :return:
         """
-        max_score = get_now_timestamp()
         min_score = 0
+        max_score = get_now_timestamp()
         peek_result = self.get_range(min_score, max_score, num=num, withscores=withscores, **kwargs)
         return peek_result
 
@@ -352,13 +370,13 @@ class TimerScheduler:
                 # zset本身的delete就具备分布式逻辑
                 return
             # 如果任务失败，在该处没有重试
-            self.do_trigger_func(job_mate)
+            self.do_task(job_mate)
 
         except Exception as e:
             print("process_task fail, error:{}".format(str(e)))
 
     @staticmethod
-    def do_trigger_func(job_mate):
+    def do_task(job_mate: JobMate):
         # TODO: 在该处, 没有做失败重试的操作, 因为该处的失败，重试还是失败，重试没有意义
         print("TimerScheduler[{}] do...".format(datetime.now()))
         return
